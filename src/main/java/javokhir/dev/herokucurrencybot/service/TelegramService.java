@@ -104,9 +104,6 @@ public class TelegramService {
             else if (data.equals("LIST")){
                 adminService.getUserList(update);
             }
-            else if (data.equals("OTHERS")){
-                adminService.getUserList(update);
-            }
             else if (userFromUpdate.getState().equals(userStateRepo.findByUserState(GET_INFORMATION))){
                 userService.getInformation(update);
             }
