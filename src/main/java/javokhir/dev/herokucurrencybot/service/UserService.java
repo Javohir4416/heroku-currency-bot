@@ -1,0 +1,227 @@
+package javokhir.dev.herokucurrencybot.service;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import javokhir.dev.herokucurrencybot.entity.User;
+import javokhir.dev.herokucurrencybot.feign.TelegramFeign;
+import javokhir.dev.herokucurrencybot.payload.Currency;
+import javokhir.dev.herokucurrencybot.repo.UserRepo;
+import javokhir.dev.herokucurrencybot.repo.UserStateRepo;
+import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
+import org.springframework.stereotype.Service;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.Update;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.Optional;
+
+import static javokhir.dev.herokucurrencybot.payload.enums.UserStateNames.*;
+import static org.bouncycastle.asn1.x500.style.RFC4519Style.name;
+
+@Service
+@RequiredArgsConstructor
+public class UserService {
+      String name=null;
+      String rate=null;
+      double amount=0.0;
+
+
+    private final UserStateRepo userStateRepo;
+
+
+    private final UserRepo userRepo;
+
+
+    private final ReplyMarkup replyMarkup;
+
+    private final TelegramFeign telegramFeign;
+    public User getUserFromUpdate(Update update){
+        if (update.hasMessage()){
+            org.telegram.telegrambots.meta.api.objects.User user = update.getMessage().getFrom();
+            Long id = user.getId();
+            Optional<User> optionalUser = userRepo.findById(id);
+            return optionalUser.orElseGet(() -> new User(
+                    user.getId(),
+                    user.getFirstName(),
+                    user.getLastName(),
+                    user.getUserName()
+            ));
+        }
+        else {
+            Long id = update.getCallbackQuery().getFrom().getId();
+            Optional<User> optionalUser = userRepo.findById(id);
+            User user=new User();
+            if (optionalUser.isPresent()) {
+                user=optionalUser.get();
+            }
+            return user;
+        }
+    }
+
+    public void sendInformationToUser(Update update) {
+        User userFromUpdate = getUserFromUpdate(update);
+        userFromUpdate.setState(userStateRepo.findByUserState(GET_INFORMATION));
+        userRepo.save(userFromUpdate);
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setChatId(userFromUpdate.getId().toString());
+        sendMessage.setText("Bu yerda qulaylik uchun mashxur valyutalar berilgan . Birini tanlashingiz yoki qolgan valyutalarni bilish  " +
+                "tugmasi orqali boshqa valyutalar haqida ma'lumot olishingiz mumkin  ");
+        sendMessage.setReplyMarkup(replyMarkup.inlineMarkup(userFromUpdate));
+        telegramFeign.sendMessageToUser(sendMessage);
+    }
+
+    @SneakyThrows
+    public void getInformation(Update update) {
+        User userFromUpdate = getUserFromUpdate(update);
+        SendMessage sendMessage=new SendMessage();
+        sendMessage.setChatId(userFromUpdate.getId().toString());
+        String data = update.getCallbackQuery().getData();
+        URL url = new URL("https://cbu.uz/oz/arkhiv-kursov-valyut/json/");
+        URLConnection urlConnection = url.openConnection();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Currency[] currencies = gson.fromJson(reader, Currency[].class);
+                if (data.equals("OTHERS")){
+                    StringBuilder list= new StringBuilder();
+                    for (Currency currency : currencies) {
+                        list.append("1 ").append(currency.getCcy()).append(" ( ").append(currency.getCcyNmUZ()).append(" ) ").append("  ➡️").append(currency.getRate()).append(" UZS\n");
+                    }
+                    sendMessage.setText(list.toString());
+                }
+                else if (data.equals("BACK")) {
+                    showMenu(update);
+                }
+                else {
+                    for (Currency currency : currencies) {
+                        if (data.equals(currency.getCcy())) {
+                            sendMessage.setText("1 " + currency.getCcy() + " ( " + currency.getCcyNmUZ() + " ) " + " is " + currency.getRate() + " UZS");
+                        }
+                    }
+                }
+        telegramFeign.sendMessageToUser(sendMessage);
+    }
+
+
+    public void showMenu(Update update) {
+        User user = getUserFromUpdate(update);
+        SendMessage sendMessage=new SendMessage();
+        sendMessage.setChatId(user.getId().toString());
+        sendMessage.setText("Xizmatlardan birini tanlang : ");
+        user.setState(userStateRepo.findByUserState(SHOW_MENU));
+        user=userRepo.save(user);
+        sendMessage.setReplyMarkup(replyMarkup.inlineMarkup(user));
+        telegramFeign.sendMessageToUser(sendMessage);
+    }
+
+    public void convertor(Update update) {
+        User user = getUserFromUpdate(update);
+        user.setState(userStateRepo.findByUserState(CONVERTOR));
+        userRepo.save(user);
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setChatId(user.getId().toString());
+        sendMessage.setText("Bu bo'limda siz boshqa valyutalarni o'zbek so'miga konvertatsiya qilishiz mumkin . Birini tanlang yoki o'zingiz xohlagan valyutaning qisqartmasini " +
+                "yozing ( masalan 'GBP' - Buyuk Britaniya funt sterlingi ) ");
+        sendMessage.setReplyMarkup(replyMarkup.inlineMarkup(user));
+        telegramFeign.sendMessageToUser(sendMessage);
+    }
+
+    public void getInformationAboutConvertor(Update update) throws IOException {
+        User user = getUserFromUpdate(update);
+        SendMessage sendMessage=new SendMessage();
+        sendMessage.setChatId(user.getId().toString());
+        String data = update.getCallbackQuery().getData();
+        URL url = new URL("https://cbu.uz/oz/arkhiv-kursov-valyut/json/");
+        URLConnection urlConnection = url.openConnection();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Currency[] currencies = gson.fromJson(reader, Currency[].class);
+        if (data.equals("OTHERS")){
+            StringBuilder list= new StringBuilder();
+            for (Currency currency : currencies) {
+                list.append(currency.getCcy()).append("  ➡  ️").append(currency.getCcyNmUZ()).append("\n");
+            }
+            sendMessage.setText(list.toString());
+        }
+        else if (data.equals("BACK")) {
+            showMenu(update);
+        }
+        else {
+            for (Currency currency : currencies) {
+                if (data.equals(currency.getCcy())) {
+                    sendMessage.setText("Siz "+ currency.getCcy() +" ( "+ currency.getCcyNmUZ()+ " ) " +"ni tanladingiz . Miqdorni kiriting (Masalan ,100)");
+                    name = currency.getCcy();
+                    rate = currency.getRate();
+                }
+            }
+            user.setState(userStateRepo.findByUserState(INPUT_AMOUNT));
+            userRepo.save(user);
+        }
+        telegramFeign.sendMessageToUser(sendMessage);
+    }
+    @SneakyThrows
+    public void getCurrencyForConvert(Update update) {
+        User user = getUserFromUpdate(update);
+        String inputText = update.getMessage().getText();
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setChatId(user.getId().toString());
+        URL url = new URL("https://cbu.uz/oz/arkhiv-kursov-valyut/json/");
+        URLConnection urlConnection = url.openConnection();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Currency[] currencies = gson.fromJson(reader, Currency[].class);
+        boolean has = false;
+        for (Currency currency : currencies) {
+            if (inputText.equals(currency.getCcy())) {
+                has = true;
+                name = currency.getCcy();
+                rate = currency.getRate();
+                sendMessage.setText("Siz " + currency.getCcyNmUZ() + " ni tanladingiz . Miqdorni kiriting (Masalan ,100)");
+                user.setState(userStateRepo.findByUserState(INPUT_AMOUNT));
+                user=userRepo.save(user);
+                telegramFeign.sendMessageToUser(sendMessage);
+            }
+        }
+        if (!has) {
+            sendMessage.setText("Bunday valyuta yo'q.Valyuta qisqartmasini to'g'ri va aniq kiriting!!!");
+            telegramFeign.sendMessageToUser(sendMessage);
+        }
+    }
+
+    public void calculateCourse(Update update) {
+        User user = getUserFromUpdate(update);
+        String inputText = update.getMessage().getText();
+        int counter=0; boolean state=false;
+        for (int i=0; i<inputText.length(); i++) {
+            char a=inputText.charAt(i);
+            if (Character.isDigit(a)|| a=='.'){
+                state=false;
+                if (a=='.') {counter++;}
+            } else {
+                state=true; break;
+            }
+        }
+        if (state || counter>1){
+            SendMessage sendMessage=new SendMessage();
+            sendMessage.setChatId(user.getId().toString());
+            sendMessage.setText("Majvud raqam kiritilmadi.Qaytadan kiriting!!!");
+            telegramFeign.sendMessageToUser(sendMessage);
+        }
+        else {
+            double course = Double.parseDouble(rate);
+            amount=Double.parseDouble(inputText);
+            float v= (float) (amount * course);
+            SendMessage sendMessage=new SendMessage();
+            sendMessage.setChatId(user.getId().toString());
+            sendMessage.setText(amount + " " + name + " is " +  v + " UZS");
+            user.setState(userStateRepo.findByUserState(CONVERTOR));
+            telegramFeign.sendMessageToUser(sendMessage);
+            convertor(update);
+        }
+    }
+}
