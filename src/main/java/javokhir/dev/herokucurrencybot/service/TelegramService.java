@@ -55,6 +55,11 @@ public class TelegramService {
 
                         case "/valyuta_malumot":
                             userService.sendInformationToUser(update);
+                            break;
+
+                        case "/stats":
+                            userService.stats(update);
+                            break;
 
                         default:
                             User userFromUpdate = userService.getUserFromUpdate(update);

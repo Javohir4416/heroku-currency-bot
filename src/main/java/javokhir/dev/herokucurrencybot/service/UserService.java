@@ -19,6 +19,7 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.List;
 import java.util.Optional;
 
 import static javokhir.dev.herokucurrencybot.payload.enums.UserStateNames.*;
@@ -223,5 +224,14 @@ public class UserService {
             telegramFeign.sendMessageToUser(sendMessage);
             convertor(update);
         }
+    }
+
+    public void stats(Update update) {
+        User user = getUserFromUpdate(update);
+        List<User> userList = userRepo.findAll();
+        SendMessage sendMessage =new SendMessage();
+        sendMessage.setChatId(user.getId().toString());
+        sendMessage.setText("Bot foydalanuvchilari soni : "+ userList.size());
+        telegramFeign.sendMessageToUser(sendMessage);
     }
 }
