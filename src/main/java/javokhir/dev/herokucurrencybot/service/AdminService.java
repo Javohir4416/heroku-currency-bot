@@ -88,8 +88,8 @@ public class AdminService {
         StringBuilder text= new StringBuilder();
         int i=1;
         for (User user1 : users) {
-            text.append(i).append(" . ").append(user1.getFirstName()).append("   ")
-                    .append(user1.getLastName()).append("   ")
+            text.append(i).append(" . ").append(user1.getFirstName()).append("      ")
+                    .append(user1.getLastName()).append("      ").append("@")
                     .append(user1.getUsername()).append("\n");
             i++;
         }
