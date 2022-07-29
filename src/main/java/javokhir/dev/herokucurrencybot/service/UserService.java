@@ -147,6 +147,8 @@ public class UserService {
             for (Currency currency : currencies) {
                 list.append(currency.getCcyNmUZ()).append("  ➡️").append(currency.getCcy()).append("\n");
             }
+            user.setState(userStateRepo.findByUserState(CONVERTOR));
+            userRepo.save(user);
             sendMessage.setText(list.toString());
         }
         else if (data.equals("BACK")) {
@@ -220,8 +222,7 @@ public class UserService {
             SendMessage sendMessage=new SendMessage();
             sendMessage.setChatId(user.getId().toString());
             sendMessage.setText(amount + " " + name + " is " +  v + " UZS");
-            user.setState(userStateRepo.findByUserState(CONVERTOR));
-            userRepo.save(user);
+            sendMessage.setReplyMarkup(replyMarkup.inlineMarkup(user));
             telegramFeign.sendMessageToUser(sendMessage);
         }
     }
