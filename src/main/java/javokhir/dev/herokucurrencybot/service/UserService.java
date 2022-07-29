@@ -71,7 +71,7 @@ public class UserService {
         userRepo.save(userFromUpdate);
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(userFromUpdate.getId().toString());
-        sendMessage.setText("Bu yerda qulaylik uchun mashxur valyutalar berilgan . Birini tanlashingiz yoki qolgan valyutalarni bilish  " +
+        sendMessage.setText("Bu yerda qulaylik uchun mashxur valyutalar berilgan . Birini tanlashingiz yoki qolgan valyutalar ro'yxati  " +
                 "tugmasi orqali boshqa valyutalar haqida ma'lumot olishingiz mumkin  ");
         sendMessage.setReplyMarkup(replyMarkup.inlineMarkup(userFromUpdate));
         telegramFeign.sendMessageToUser(sendMessage);
@@ -127,7 +127,7 @@ public class UserService {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(user.getId().toString());
         sendMessage.setText("Bu bo'limda siz boshqa valyutalarni o'zbek so'miga konvertatsiya qilishiz mumkin . Birini tanlang yoki o'zingiz xohlagan valyutaning qisqartmasini " +
-                "yozing ( masalan 'GBP' - Buyuk Britaniya funt sterlingi ) ");
+                "yozing ( masalan RUB , qolgan valyuta qisqartmalarini qolgan valyutalar ro'yxati  tugmasi orqali olishingiz mumkin   ) ");
         sendMessage.setReplyMarkup(replyMarkup.inlineMarkup(user));
         telegramFeign.sendMessageToUser(sendMessage);
     }
@@ -145,7 +145,7 @@ public class UserService {
         if (data.equals("OTHERS")){
             StringBuilder list= new StringBuilder();
             for (Currency currency : currencies) {
-                list.append(currency.getCcy()).append("  ➡  ️").append(currency.getCcyNmUZ()).append("\n");
+                list.append(currency.getCcyNmUZ()).append("  ➡️").append(currency.getCcy()).append("\n");
             }
             sendMessage.setText(list.toString());
         }

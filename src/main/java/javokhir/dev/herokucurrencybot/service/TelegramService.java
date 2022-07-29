@@ -57,7 +57,7 @@ public class TelegramService {
                             userService.sendInformationToUser(update);
                             break;
                             case "/converter":
-                            userService.getCurrencyForConvert(update);
+                            userService.convertor(update);
                             break;
 
                         case "/stats":
