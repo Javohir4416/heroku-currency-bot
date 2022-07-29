@@ -221,6 +221,7 @@ public class UserService {
             sendMessage.setChatId(user.getId().toString());
             sendMessage.setText(amount + " " + name + " is " +  v + " UZS");
             user.setState(userStateRepo.findByUserState(CONVERTOR));
+            userRepo.save(user);
             telegramFeign.sendMessageToUser(sendMessage);
         }
     }
