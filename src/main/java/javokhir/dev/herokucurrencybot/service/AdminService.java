@@ -82,4 +82,18 @@ public class AdminService {
         }
     }
 
+    public void getUserList(Update update) {
+        User user = userService.getUserFromUpdate(update);
+        List<User> users = userRepo.findAll();
+        StringBuilder text= new StringBuilder();
+        for (User user1 : users) {
+            text.append(user1.getFirstName()).append(" ")
+                    .append(user1.getLastName()).append(" ")
+                    .append(user1.getUsername());
+        }
+        SendMessage sendMessage=new SendMessage();
+        sendMessage.setChatId(user.getId().toString());
+        sendMessage.setText(text.toString());
+        telegramFeign.sendMessageToUser(sendMessage);
+    }
 }

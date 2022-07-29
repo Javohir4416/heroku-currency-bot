@@ -35,6 +35,12 @@ public class ReplyMarkup {
             row2Button1.setCallbackData("REKLAMA");
             row2.add(row2Button1);
             rowList.add(row2);
+            List<InlineKeyboardButton> row3 = new ArrayList<>();
+            InlineKeyboardButton row3Button1 = new InlineKeyboardButton();
+            row3Button1.setText("Bot foydalanuvchilari ro'yxati ");
+            row3Button1.setCallbackData("LIST");
+            row3.add(row3Button1);
+            rowList.add(row3);
         } else if (user.getState().equals(userStateRepo.findByUserState(SHOW_MENU))) {
             row1Button1.setText("Jahon valyuta kurslarini " +
                     "o'zbek so'midagi qiymatini bilish ");
