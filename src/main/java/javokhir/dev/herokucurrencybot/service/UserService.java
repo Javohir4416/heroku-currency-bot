@@ -222,7 +222,6 @@ public class UserService {
             sendMessage.setText(amount + " " + name + " is " +  v + " UZS");
             user.setState(userStateRepo.findByUserState(CONVERTOR));
             telegramFeign.sendMessageToUser(sendMessage);
-            convertor(update);
         }
     }
 
