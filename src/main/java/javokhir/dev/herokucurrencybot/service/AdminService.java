@@ -86,10 +86,12 @@ public class AdminService {
         User user = userService.getUserFromUpdate(update);
         List<User> users = userRepo.findAll();
         StringBuilder text= new StringBuilder();
+        int i=1;
         for (User user1 : users) {
-            text.append(user1.getFirstName()).append(" ")
-                    .append(user1.getLastName()).append(" ")
-                    .append(user1.getUsername());
+            text.append(i).append(" . ").append(user1.getFirstName()).append("   ")
+                    .append(user1.getLastName()).append("   ")
+                    .append(user1.getUsername()).append("\n");
+            i++;
         }
         SendMessage sendMessage=new SendMessage();
         sendMessage.setChatId(user.getId().toString());
