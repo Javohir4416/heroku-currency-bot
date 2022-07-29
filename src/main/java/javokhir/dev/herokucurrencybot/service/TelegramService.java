@@ -56,6 +56,9 @@ public class TelegramService {
                         case "/valyuta_malumot":
                             userService.sendInformationToUser(update);
                             break;
+                            case "/converter":
+                            userService.getCurrencyForConvert(update);
+                            break;
 
                         case "/stats":
                             userService.stats(update);
