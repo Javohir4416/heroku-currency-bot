@@ -96,7 +96,7 @@ public class UserService {
                     }
                     sendMessage.setText(list.toString());
                 }
-                else if (data.equals("BACK")) {
+                else if (data.equals("BACK_TO_MENU")) {
                     showMenu(update);
                 }
                 else {
@@ -151,7 +151,7 @@ public class UserService {
             sendMessage.setText(list.toString());
         }
         else if (data.equals("BACK")) {
-            showMenu(update);
+            chooseConvertor(update);
         }
         else {
             for (Currency currency : currencies) {

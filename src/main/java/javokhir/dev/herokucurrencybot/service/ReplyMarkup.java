@@ -72,7 +72,7 @@ public class ReplyMarkup {
             List<InlineKeyboardButton> row3 = new ArrayList<>();
             InlineKeyboardButton row3Button1 = new InlineKeyboardButton();
             row3Button1.setText("Back");
-            row3Button1.setCallbackData("BACK");
+            row3Button1.setCallbackData("BACK_TO_MENU");
             row1.add(row1Button1);
             row1.add(row1Button2);
             row1.add(row1Button3);
@@ -101,10 +101,15 @@ public class ReplyMarkup {
             InlineKeyboardButton row2Button1 = new InlineKeyboardButton();
             row2Button1.setText("O'zbek so'midan jahon valyutalariga konvertatsiya");
             row2Button1.setCallbackData("CONVERTOR_FROM_UZBEK");
+            List<InlineKeyboardButton> row3 = new ArrayList<>();
+            InlineKeyboardButton row3Button1 = new InlineKeyboardButton();
+            row3Button1.setCallbackData("BACK_TO_CONVERTOR");
             row1.add(row1Button1);
             row2.add(row2Button1);
+            row3.add(row3Button1);
             rowList.add(row1);
             rowList.add(row2);
+            rowList.add(row3);
         }
         else if (user.getState().equals(userStateRepo.findByUserState(CONVERTOR_FROM_UZBEK))) {
             row1Button1.setText("Jahon valyutalari qisqartmalari");

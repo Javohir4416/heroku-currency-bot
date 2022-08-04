@@ -121,6 +121,14 @@ public class TelegramService {
             else if (data.equals("LIST_OF_CURRENCIES")){
                 userService.getListCurrencies(update);
             }
+            else if (data.equals("BACK_TO_MENU")){
+                userService.showMenu(update);
+            }
+            else if (data.equals("BACK_TO_CONVERTOR")){
+                userService.chooseConvertor(update);
+            }
+
+
 
 
             else if (userFromUpdate.getState().equals(userStateRepo.findByUserState(GET_INFORMATION))){
