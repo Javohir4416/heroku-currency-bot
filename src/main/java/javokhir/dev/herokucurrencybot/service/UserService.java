@@ -220,7 +220,7 @@ public class UserService {
             float v= (float) (amount * course);
             SendMessage sendMessage=new SendMessage();
             sendMessage.setChatId(user.getId().toString());
-            sendMessage.setText(amount + " " + name  +  v + " UZS (so'm)");
+            sendMessage.setText(amount + " -> " + name  +  v + " UZS (so'm)");
             user.setState(userStateRepo.findByUserState(CHOOSE_CONVERTOR));
             userRepo.save(user);
 //            sendMessage.setReplyMarkup(replyMarkup.inlineMarkup(user));
@@ -316,7 +316,7 @@ public class UserService {
             float v= (float) (amount/course);
             SendMessage sendMessage=new SendMessage();
             sendMessage.setChatId(user.getId().toString());
-            sendMessage.setText(amount + " UZS (so'm)" + v +  name);
+            sendMessage.setText(amount + " UZS (so'm)  -> " + v +  name);
             user.setState(userStateRepo.findByUserState(CHOOSE_CONVERTOR));
             userRepo.save(user);
 //            sendMessage.setReplyMarkup(replyMarkup.inlineMarkup(user));

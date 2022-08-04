@@ -114,7 +114,12 @@ public class ReplyMarkup {
         else if (user.getState().equals(userStateRepo.findByUserState(CONVERTOR_FROM_UZBEK))) {
             row1Button1.setText("Jahon valyutalari qisqartmalari");
             row1Button1.setCallbackData("LIST_OF_CURRENCIES");
+            List<InlineKeyboardButton> row2 = new ArrayList<>();
+            InlineKeyboardButton row2Button1 = new InlineKeyboardButton();
+            row2Button1.setCallbackData("BACK_TO_CONVERTOR");
             row1.add(row1Button1);
+            row2.add(row2Button1);
+            rowList.add(row2);
             rowList.add(row1);
         }
 
