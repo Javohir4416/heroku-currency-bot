@@ -49,13 +49,13 @@ public class ReplyMarkup {
             rowList.add(row1);
             List<InlineKeyboardButton> row2 = new ArrayList<>();
             InlineKeyboardButton row2Button1 = new InlineKeyboardButton();
-            row2Button1.setText("Valyutalarni konvertatsiya qilish");
-            row2Button1.setCallbackData("CONVERTOR");
+            row2Button1.setText("Valyutalarni konvertatsiya qilish  \uD83D\uDD01");
+            row2Button1.setCallbackData("CHOOSE_CONVERTOR");
             row2.add(row2Button1);
             rowList.add(row2);
         }
         else if (user.getState().equals(userStateRepo.findByUserState(GET_INFORMATION))||
-                 user.getState().equals(userStateRepo.findByUserState(CONVERTOR))){
+                 user.getState().equals(userStateRepo.findByUserState(CONVERTOR_TO_UZBEK))){
             row1Button1.setText("\uD83C\uDDFA\uD83C\uDDF8USD\uD83C\uDDFA\uD83C\uDDF8");
             row1Button1.setCallbackData("USD");
             InlineKeyboardButton row1Button2;
@@ -94,6 +94,26 @@ public class ReplyMarkup {
             rowList.add(row2);
 
         }
+        else if (user.getState().equals(userStateRepo.findByUserState(CHOOSE_CONVERTOR))) {
+            row1Button1.setText("Jahon valyutalaridan o'zbek so'miga konvertatsiya");
+            row1Button1.setCallbackData("CONVERTOR_TOZ_UZBEK");
+            List<InlineKeyboardButton> row2 = new ArrayList<>();
+            InlineKeyboardButton row2Button1 = new InlineKeyboardButton();
+            row2Button1.setText("O'zbek so'midan jahon valyutalariga konvertatsiya");
+            row2Button1.setCallbackData("CONVERTOR_FROM_UZBEK");
+            row1.add(row1Button1);
+            row2.add(row2Button1);
+            rowList.add(row1);
+            rowList.add(row2);
+        }
+        else if (user.getState().equals(userStateRepo.findByUserState(CONVERTOR_FROM_UZBEK))) {
+            row1Button1.setText("Jahon valyutalari qisqartmalari");
+            row1Button1.setCallbackData("LIST_OF_CURRENCIES");
+            row1.add(row1Button1);
+            rowList.add(row1);
+        }
+
+
         inlineMarkup.setKeyboard(rowList);
         return inlineMarkup;
     }

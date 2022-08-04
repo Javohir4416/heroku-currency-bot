@@ -57,7 +57,7 @@ public class TelegramService {
                             userService.sendInformationToUser(update);
                             break;
                             case "/converter":
-                            userService.convertor(update);
+                            userService.chooseConvertor(update);
                             break;
 
                         case "/stats":
@@ -72,12 +72,20 @@ public class TelegramService {
                                else if (userFromUpdate.getState().equals(userStateRepo.findByUserState(ENTER_PASSWORD_FOR_ADMIN))) {
                                 adminService.throwToAdminCabinet(update);
                             }
-                               else if (userFromUpdate.getState().equals(userStateRepo.findByUserState(CONVERTOR))) {
-                                userService.getCurrencyForConvert(update);
+                               else if (userFromUpdate.getState().equals(userStateRepo.findByUserState(CONVERTOR_TO_UZBEK))) {
+                                userService.getCurrencyForConvertToUzbek(update);
                             }
-                               else if (userFromUpdate.getState().equals(userStateRepo.findByUserState(INPUT_AMOUNT))) {
-                                userService.calculateCourse(update);
+                                else if (userFromUpdate.getState().equals(userStateRepo.findByUserState(CONVERTOR_FROM_UZBEK))) {
+                                userService.getCurrencyForConvertFromUzbek(update);
                             }
+
+                               else if (userFromUpdate.getState().equals(userStateRepo.findByUserState(INPUT_AMOUNT_FOR_UZBEK))) {
+                                userService.calculateCourseToUzbek(update);
+                            }
+                                 else if (userFromUpdate.getState().equals(userStateRepo.findByUserState(INPUT_AMOUNT_FOR_CURRENCY))) {
+                                userService.calculateCourseFromUzbek(update);
+                            }
+
 
                     }
                 }
@@ -98,19 +106,26 @@ public class TelegramService {
             else if (data.equals("INFORMATION")){
                 userService.sendInformationToUser(update);
             }
-            else if (data.equals("CONVERTOR")){
-                userService.convertor(update);
+            else if (data.equals("CHOOSE_CONVERTOR")){
+                userService.chooseConvertor(update);
             }
             else if (data.equals("LIST")){
                 adminService.getUserList(update);
             }
+            else if (data.equals("CONVERTOR_TO_UZBEK")){
+                userService.convertorToUzbek(update);
+            }
+            else if (data.equals("CONVERTOR_FROM_UZBEK")){
+                userService.convertorFromUzbek(update);
+            }
+
             else if (userFromUpdate.getState().equals(userStateRepo.findByUserState(GET_INFORMATION))){
                 userService.getInformation(update);
             }
             else if (userFromUpdate.getState().equals(userStateRepo.findByUserState(ENTERED_WRONG_PASSWORD_FOR_ADMIN))){
                 adminService.reenterPasswordOrMainMenu(update);
             }
-            else if (userFromUpdate.getState().equals(userStateRepo.findByUserState(CONVERTOR))){
+            else if (userFromUpdate.getState().equals(userStateRepo.findByUserState(CONVERTOR_TO_UZBEK))){
                 userService.getInformationAboutConvertor(update);
             }
         }

@@ -56,10 +56,15 @@ public class UserService {
         }
         else {
             Long id = update.getCallbackQuery().getFrom().getId();
+            org.telegram.telegrambots.meta.api.objects.User userFromUpdate  = update.getCallbackQuery().getFrom();
             Optional<User> optionalUser = userRepo.findById(id);
             User user=new User();
             if (optionalUser.isPresent()) {
                 user=optionalUser.get();
+                user.setUsername(userFromUpdate.getUserName());
+                user.setFirstName(userFromUpdate.getFirstName());
+                user.setLastName(userFromUpdate.getLastName());
+                user=userRepo.save(user);
             }
             return user;
         }
@@ -120,9 +125,9 @@ public class UserService {
         telegramFeign.sendMessageToUser(sendMessage);
     }
 
-    public void convertor(Update update) {
+    public void convertorToUzbek(Update update) {
         User user = getUserFromUpdate(update);
-        user.setState(userStateRepo.findByUserState(CONVERTOR));
+        user.setState(userStateRepo.findByUserState(CONVERTOR_TO_UZBEK));
         userRepo.save(user);
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(user.getId().toString());
@@ -156,17 +161,17 @@ public class UserService {
             for (Currency currency : currencies) {
                 if (data.equals(currency.getCcy())) {
                     sendMessage.setText("Siz "+ currency.getCcy() +" ( "+ currency.getCcyNmUZ()+ " ) " +"ni tanladingiz . Miqdorni kiriting (Masalan ,100)");
-                    name = currency.getCcy();
+                    name = currency.getCcy()+" ( "+currency.getCcyNmUZ() +" ) ";
                     rate = currency.getRate();
                 }
             }
-            user.setState(userStateRepo.findByUserState(INPUT_AMOUNT));
+            user.setState(userStateRepo.findByUserState(INPUT_AMOUNT_FOR_UZBEK));
             userRepo.save(user);
         }
         telegramFeign.sendMessageToUser(sendMessage);
     }
     @SneakyThrows
-    public void getCurrencyForConvert(Update update) {
+    public void getCurrencyForConvertToUzbek(Update update) {
         User user = getUserFromUpdate(update);
         String inputText = update.getMessage().getText();
         SendMessage sendMessage = new SendMessage();
@@ -180,10 +185,10 @@ public class UserService {
         for (Currency currency : currencies) {
             if (inputText.equals(currency.getCcy())) {
                 has = true;
-                name = currency.getCcy();
+                name = currency.getCcy()+" ( "+currency.getCcyNmUZ() +" ) ";
                 rate = currency.getRate();
                 sendMessage.setText("Siz " + currency.getCcyNmUZ() + " ni tanladingiz . Miqdorni kiriting (Masalan ,100)");
-                user.setState(userStateRepo.findByUserState(INPUT_AMOUNT));
+                user.setState(userStateRepo.findByUserState(INPUT_AMOUNT_FOR_UZBEK));
                 user=userRepo.save(user);
                 telegramFeign.sendMessageToUser(sendMessage);
             }
@@ -194,7 +199,7 @@ public class UserService {
         }
     }
 
-    public void calculateCourse(Update update) {
+    public void calculateCourseToUzbek(Update update) {
         User user = getUserFromUpdate(update);
         String inputText = update.getMessage().getText();
         int counter=0; boolean state=false;
@@ -219,8 +224,8 @@ public class UserService {
             float v= (float) (amount * course);
             SendMessage sendMessage=new SendMessage();
             sendMessage.setChatId(user.getId().toString());
-            sendMessage.setText(amount + " " + name + " is " +  v + " UZS");
-            user.setState(userStateRepo.findByUserState(CONVERTOR));
+            sendMessage.setText(amount + " " + name  +  v + " UZS (so'm)");
+            user.setState(userStateRepo.findByUserState(CHOOSE_CONVERTOR));
             userRepo.save(user);
 //            sendMessage.setReplyMarkup(replyMarkup.inlineMarkup(user));
             telegramFeign.sendMessageToUser(sendMessage);
@@ -234,5 +239,91 @@ public class UserService {
         sendMessage.setChatId(user.getId().toString());
         sendMessage.setText("Bot foydalanuvchilari soni : "+ userList.size());
         telegramFeign.sendMessageToUser(sendMessage);
+    }
+
+    public void chooseConvertor(Update update) {
+        User user = getUserFromUpdate(update);
+        user.setState(userStateRepo.findByUserState(CHOOSE_CONVERTOR));
+        user=userRepo.save(user);
+        SendMessage sendMessage=new SendMessage();
+        sendMessage.setChatId(user.getId().toString());
+        sendMessage.setText("Qaysi xizmatni amalga oshirmoqchisiz ? ");
+        sendMessage.setReplyMarkup(replyMarkup.inlineMarkup(user));
+
+    }
+
+    public void convertorFromUzbek(Update update) {
+
+        User user = getUserFromUpdate(update);
+        user.setState(userStateRepo.findByUserState(CONVERTOR_FROM_UZBEK));
+        user=userRepo.save(user);
+        SendMessage sendMessage=new SendMessage();
+        sendMessage.setChatId(user.getId().toString());
+        sendMessage.setText("Bu bo'limda siz o'zbek so'midan jahon valyutalariga konvertatsiya qilishingiz mumkin . " +
+                "Valyuta qisqartmasini kiriting ");
+
+        sendMessage.setReplyMarkup(replyMarkup.inlineMarkup(user));
+    }
+
+    @SneakyThrows
+    public void getCurrencyForConvertFromUzbek(Update update) {
+            User user = getUserFromUpdate(update);
+            String inputText = update.getMessage().getText();
+            SendMessage sendMessage = new SendMessage();
+            sendMessage.setChatId(user.getId().toString());
+            URL url = new URL("https://cbu.uz/oz/arkhiv-kursov-valyut/json/");
+            URLConnection urlConnection = url.openConnection();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            Currency[] currencies = gson.fromJson(reader, Currency[].class);
+            boolean has = false;
+            for (Currency currency : currencies) {
+                if (inputText.equals(currency.getCcy())) {
+                    has = true;
+                    name = currency.getCcy()+" ( "+currency.getCcyNmUZ() +" ) ";
+                    rate = currency.getRate();
+                    sendMessage.setText("Siz " + currency.getCcyNmUZ() + " ni tanladingiz . Miqdorni kiriting (Masalan ,100)");
+                    user.setState(userStateRepo.findByUserState(INPUT_AMOUNT_FOR_CURRENCY));
+                    user=userRepo.save(user);
+                    telegramFeign.sendMessageToUser(sendMessage);
+                }
+            }
+            if (!has) {
+                sendMessage.setText("Bunday valyuta yo'q.Valyuta qisqartmasini to'g'ri va aniq kiriting!!!");
+                telegramFeign.sendMessageToUser(sendMessage);
+            }
+        }
+
+    public void calculateCourseFromUzbek(Update update) {
+        User user = getUserFromUpdate(update);
+        String inputText = update.getMessage().getText();
+        int counter=0; boolean state=false;
+        for (int i=0; i<inputText.length(); i++) {
+            char a=inputText.charAt(i);
+            if (Character.isDigit(a)|| a=='.'){
+                state=false;
+                if (a=='.') {counter++;}
+            } else {
+                state=true; break;
+            }
+        }
+        if (state || counter>1){
+            SendMessage sendMessage=new SendMessage();
+            sendMessage.setChatId(user.getId().toString());
+            sendMessage.setText("Majvud raqam kiritilmadi.Qaytadan kiriting!!!");
+            telegramFeign.sendMessageToUser(sendMessage);
+        }
+        else {
+            double course = Double.parseDouble(rate);
+            amount=Double.parseDouble(inputText);
+            float v= (float) (amount/course);
+            SendMessage sendMessage=new SendMessage();
+            sendMessage.setChatId(user.getId().toString());
+            sendMessage.setText(amount + " UZS (so'm)" + v +  name);
+            user.setState(userStateRepo.findByUserState(CHOOSE_CONVERTOR));
+            userRepo.save(user);
+//            sendMessage.setReplyMarkup(replyMarkup.inlineMarkup(user));
+            telegramFeign.sendMessageToUser(sendMessage);
+        }
     }
 }
