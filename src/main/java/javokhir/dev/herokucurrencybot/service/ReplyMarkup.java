@@ -96,7 +96,7 @@ public class ReplyMarkup {
         }
         else if (user.getState().equals(userStateRepo.findByUserState(CHOOSE_CONVERTOR))) {
             row1Button1.setText("Jahon valyutalaridan o'zbek so'miga konvertatsiya");
-            row1Button1.setCallbackData("CONVERTOR_TOZ_UZBEK");
+            row1Button1.setCallbackData("CONVERTOR_TO_UZBEK");
             List<InlineKeyboardButton> row2 = new ArrayList<>();
             InlineKeyboardButton row2Button1 = new InlineKeyboardButton();
             row2Button1.setText("O'zbek so'midan jahon valyutalariga konvertatsiya");

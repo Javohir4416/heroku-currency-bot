@@ -118,6 +118,10 @@ public class TelegramService {
             else if (data.equals("CONVERTOR_FROM_UZBEK")){
                 userService.convertorFromUzbek(update);
             }
+            else if (data.equals("LIST_OF_CURRENCIES")){
+                userService.getListCurrencies(update);
+            }
+
 
             else if (userFromUpdate.getState().equals(userStateRepo.findByUserState(GET_INFORMATION))){
                 userService.getInformation(update);

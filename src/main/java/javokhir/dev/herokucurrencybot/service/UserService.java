@@ -92,7 +92,7 @@ public class UserService {
                 if (data.equals("OTHERS")){
                     StringBuilder list= new StringBuilder();
                     for (Currency currency : currencies) {
-                        list.append("1 ").append(currency.getCcy()).append(" ( ").append(currency.getCcyNmUZ()).append(" ) ").append("  ➡️").append(currency.getRate()).append(" UZS\n");
+                        list.append("1 ").append(currency.getCcy()).append(" ( ").append(currency.getCcyNmUZ()).append(" ) ").append("  ➡️").append(currency.getRate()).append(" UZS (so'm)\n");
                     }
                     sendMessage.setText(list.toString());
                 }
@@ -102,7 +102,7 @@ public class UserService {
                 else {
                     for (Currency currency : currencies) {
                         if (data.equals(currency.getCcy())) {
-                            sendMessage.setText("1 " + currency.getCcy() + " ( " + currency.getCcyNmUZ() + " ) " + " is " + currency.getRate() + " UZS");
+                            sendMessage.setText("1 " + currency.getCcy() + " ( " + currency.getCcyNmUZ() + " ) " + "    " + currency.getRate() + " UZS(so'm)");
                         }
                     }
                 }
@@ -322,5 +322,23 @@ public class UserService {
 //            sendMessage.setReplyMarkup(replyMarkup.inlineMarkup(user));
             telegramFeign.sendMessageToUser(sendMessage);
         }
+    }
+
+    @SneakyThrows
+    public void getListCurrencies(Update update) {
+        URL url = new URL("https://cbu.uz/oz/arkhiv-kursov-valyut/json/");
+        URLConnection urlConnection = url.openConnection();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Currency[] currencies = gson.fromJson(reader, Currency[].class);
+        User user = getUserFromUpdate(update);
+        SendMessage sendMessage=new SendMessage();
+        sendMessage.setChatId(user.getId().toString());
+        StringBuilder list= new StringBuilder();
+        for (Currency currency : currencies) {
+            list.append(currency.getCcyNmUZ()).append("  ➡️").append(currency.getCcy()).append("\n");
+        }
+        sendMessage.setText(list.toString());
+        telegramFeign.sendMessageToUser(sendMessage);
     }
 }
