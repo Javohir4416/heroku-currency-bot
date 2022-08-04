@@ -246,7 +246,6 @@ public class UserService {
         sendMessage.setText("Qaysi xizmatni amalga oshirmoqchisiz ? ");
         sendMessage.setReplyMarkup(replyMarkup.inlineMarkup(user));
         telegramFeign.sendMessageToUser(sendMessage);
-
     }
 
     public void convertorFromUzbek(Update update) {
