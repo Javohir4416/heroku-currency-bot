@@ -49,7 +49,7 @@ public class ReplyMarkup {
             rowList.add(row1);
             List<InlineKeyboardButton> row2 = new ArrayList<>();
             InlineKeyboardButton row2Button1 = new InlineKeyboardButton();
-            row2Button1.setText("Valyutalarni konvertatsiya qilish  \uD83D\uDD01");
+            row2Button1.setText("Valyutalarni konvertatsiya qilish");
             row2Button1.setCallbackData("CHOOSE_CONVERTOR");
             row2.add(row2Button1);
             rowList.add(row2);
@@ -122,8 +122,6 @@ public class ReplyMarkup {
             rowList.add(row2);
             rowList.add(row1);
         }
-
-
         inlineMarkup.setKeyboard(rowList);
         return inlineMarkup;
     }
