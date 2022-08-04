@@ -245,6 +245,7 @@ public class UserService {
         sendMessage.setChatId(user.getId().toString());
         sendMessage.setText("Qaysi xizmatni amalga oshirmoqchisiz ? ");
         sendMessage.setReplyMarkup(replyMarkup.inlineMarkup(user));
+        telegramFeign.sendMessageToUser(sendMessage);
 
     }
 
@@ -259,6 +260,7 @@ public class UserService {
                 "Valyuta qisqartmasini kiriting ");
 
         sendMessage.setReplyMarkup(replyMarkup.inlineMarkup(user));
+        telegramFeign.sendMessageToUser(sendMessage);
     }
 
     @SneakyThrows
