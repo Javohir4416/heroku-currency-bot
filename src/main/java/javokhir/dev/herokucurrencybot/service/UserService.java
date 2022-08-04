@@ -294,17 +294,17 @@ public class UserService {
     public void calculateCourseFromUzbek(Update update) {
         User user = getUserFromUpdate(update);
         String inputText = update.getMessage().getText();
-        int counter=0; boolean state=false;
+        int counter=0; boolean state1=false;
         for (int i=0; i<inputText.length(); i++) {
             char a=inputText.charAt(i);
             if (Character.isDigit(a)|| a=='.'){
-                state=false;
+                state1=false;
                 if (a=='.') {counter++;}
             } else {
-                state=true; break;
+                state1=true; break;
             }
         }
-        if (state || counter>1){
+        if (state1 || counter>1){
             SendMessage sendMessage=new SendMessage();
             sendMessage.setChatId(user.getId().toString());
             sendMessage.setText("Majvud raqam kiritilmadi.Qaytadan kiriting!!!");
