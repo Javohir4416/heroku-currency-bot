@@ -61,10 +61,6 @@ public class UserService {
             User user=new User();
             if (optionalUser.isPresent()) {
                 user=optionalUser.get();
-                user.setUsername(userFromUpdate.getUserName());
-                user.setFirstName(userFromUpdate.getFirstName());
-                user.setLastName(userFromUpdate.getLastName());
-                user=userRepo.save(user);
             }
             return user;
         }
