@@ -45,7 +45,6 @@ public class TelegramService {
                 if(text!=null) {
                     switch (text) {
                         case "/start":
-
                         case "/bosh_menu":
                             userService.showMenu(update);
                             break;

@@ -44,19 +44,19 @@ public class UserService {
     private final TelegramFeign telegramFeign;
     public User getUserFromUpdate(Update update){
         if (update.hasMessage()){
-            org.telegram.telegrambots.meta.api.objects.User user = update.getMessage().getFrom();
-            Long id = user.getId();
+            org.telegram.telegrambots.meta.api.objects.User userFromUpdate = update.getMessage().getFrom();
+            Long id = userFromUpdate.getId();
             Optional<User> optionalUser = userRepo.findById(id);
-            return optionalUser.orElseGet(() -> new User(
-                    user.getId(),
-                    user.getFirstName(),
-                    user.getLastName(),
-                    user.getUserName()
-            ));
+            User user;
+            user = optionalUser.orElseGet(() -> new User(userFromUpdate.getId(),
+                    userFromUpdate.getFirstName(),
+                    userFromUpdate.getLastName(),
+                    userFromUpdate.getUserName()));
+            user=userRepo.save(user);
+            return user;
         }
         else {
             Long id = update.getCallbackQuery().getFrom().getId();
-            org.telegram.telegrambots.meta.api.objects.User userFromUpdate  = update.getCallbackQuery().getFrom();
             Optional<User> optionalUser = userRepo.findById(id);
             User user=new User();
             if (optionalUser.isPresent()) {
