@@ -25,25 +25,25 @@ public class ReplyMarkup {
         List<InlineKeyboardButton> row1 = new ArrayList<>();
         InlineKeyboardButton row1Button1 = new InlineKeyboardButton();
         if (user.getState().equals(userStateRepo.findByUserState(THROW_TO_ADMIN_CABINET))) {
-            row1Button1.setText("Bot foydalanuvchilariga xabar junatish ✍️ ");
+            row1Button1.setText("Bot foydalanuvchilariga xabar jo'natish ✍️ ");
             row1Button1.setCallbackData("XABAR");
             row1.add(row1Button1);
             rowList.add(row1);
             List<InlineKeyboardButton> row2 = new ArrayList<>();
             InlineKeyboardButton row2Button1 = new InlineKeyboardButton();
-            row2Button1.setText("Bot foydalanuvchilariga reklama junatish ");
+            row2Button1.setText("Bot foydalanuvchilariga reklama jo'natish ");
             row2Button1.setCallbackData("REKLAMA");
             row2.add(row2Button1);
             rowList.add(row2);
             List<InlineKeyboardButton> row3 = new ArrayList<>();
             InlineKeyboardButton row3Button1 = new InlineKeyboardButton();
-            row3Button1.setText("Bot foydalanuvchilari ruyxati ");
+            row3Button1.setText("Bot foydalanuvchilari ro'yxati ");
             row3Button1.setCallbackData("LIST");
             row3.add(row3Button1);
             rowList.add(row3);
         } else if (user.getState().equals(userStateRepo.findByUserState(SHOW_MENU))) {
             row1Button1.setText("Jahon valyuta kurslarini " +
-                    "uzbek sumidagi qiymatini bilish ");
+                    "o'zbek so'midagi qiymatini bilish ");
             row1Button1.setCallbackData("INFORMATION");
             row1.add(row1Button1);
             rowList.add(row1);
@@ -67,7 +67,7 @@ public class ReplyMarkup {
             row1Button3.setCallbackData("EUR");
             List<InlineKeyboardButton> row2 = new ArrayList<>();
             InlineKeyboardButton row2Button1 = new InlineKeyboardButton();
-            row2Button1.setText("Qolgan valyutalarni ruyxati");
+            row2Button1.setText("Qolgan valyutalarni ro'yxati");
             row2Button1.setCallbackData("OTHERS");
             List<InlineKeyboardButton> row3 = new ArrayList<>();
             InlineKeyboardButton row3Button1 = new InlineKeyboardButton();
@@ -95,14 +95,15 @@ public class ReplyMarkup {
 
         }
         else if (user.getState().equals(userStateRepo.findByUserState(CHOOSE_CONVERTOR))) {
-            row1Button1.setText("Jahon valyutalaridan uzbek sumiga konvertatsiya");
+            row1Button1.setText("Jahon valyutalaridan o'zbek so'miga konvertatsiya");
             row1Button1.setCallbackData("CONVERTOR_TO_UZBEK");
             List<InlineKeyboardButton> row2 = new ArrayList<>();
             InlineKeyboardButton row2Button1 = new InlineKeyboardButton();
-            row2Button1.setText("O'zbek sumidan jahon valyutalariga konvertatsiya");
+            row2Button1.setText("O'zbek so'midan jahon valyutalariga konvertatsiya");
             row2Button1.setCallbackData("CONVERTOR_FROM_UZBEK");
             List<InlineKeyboardButton> row3 = new ArrayList<>();
             InlineKeyboardButton row3Button1 = new InlineKeyboardButton();
+            row3Button1.setText("Back");
             row3Button1.setCallbackData("BACK_TO_CONVERTOR");
             row1.add(row1Button1);
             row2.add(row2Button1);

@@ -220,7 +220,7 @@ public class UserService {
             float v= (float) (amount * course);
             SendMessage sendMessage=new SendMessage();
             sendMessage.setChatId(user.getId().toString());
-            sendMessage.setText(amount + " -> " + name  +  v + " UZS (so'm)");
+            sendMessage.setText(amount +"   "+ name  +  v + "  ->  " + " UZS (so'm)");
             user.setState(userStateRepo.findByUserState(CHOOSE_CONVERTOR));
             userRepo.save(user);
 //            sendMessage.setReplyMarkup(replyMarkup.inlineMarkup(user));
@@ -279,7 +279,8 @@ public class UserService {
                     has = true;
                     name = currency.getCcy()+" ( "+currency.getCcyNmUZ() +" ) ";
                     rate = currency.getRate();
-                    sendMessage.setText("Siz " + currency.getCcyNmUZ() + " ni tanladingiz . Miqdorni kiriting (Masalan ,100)");
+                    sendMessage.setText("Siz " + currency.getCcyNmUZ() + " ni tanladingiz . Hozir kirirtadigan pul miqdoringiz o'zbek" +
+                            "so'midan "+ " "+ currency.getCcyNmUZ() + " ga konvertatsiya bo'ladi ");
                     user.setState(userStateRepo.findByUserState(INPUT_AMOUNT_FOR_CURRENCY));
                     user=userRepo.save(user);
                     telegramFeign.sendMessageToUser(sendMessage);
@@ -316,7 +317,7 @@ public class UserService {
             float v= (float) (amount/course);
             SendMessage sendMessage=new SendMessage();
             sendMessage.setChatId(user.getId().toString());
-            sendMessage.setText(amount + " UZS (so'm)  -> " + v +  name);
+            sendMessage.setText(amount + " UZS (so'm)  -> " + v + "  " +  name);
             user.setState(userStateRepo.findByUserState(CHOOSE_CONVERTOR));
             userRepo.save(user);
 //            sendMessage.setReplyMarkup(replyMarkup.inlineMarkup(user));
