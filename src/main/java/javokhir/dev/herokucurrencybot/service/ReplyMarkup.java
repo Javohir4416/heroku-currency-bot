@@ -121,12 +121,12 @@ public class ReplyMarkup {
             row1Button1.setCallbackData("LIST_OF_CURRENCIES");
             List<InlineKeyboardButton> row2 = new ArrayList<>();
             InlineKeyboardButton row2Button1 = new InlineKeyboardButton();
-            row2Button1.setText("BACK");
+            row2Button1.setText("Back");
             row2Button1.setCallbackData("BACK_TO_CONVERTOR");
             row1.add(row1Button1);
             row2.add(row2Button1);
-            rowList.add(row2);
             rowList.add(row1);
+            rowList.add(row2);
         }
         inlineMarkup.setKeyboard(rowList);
         return inlineMarkup;
