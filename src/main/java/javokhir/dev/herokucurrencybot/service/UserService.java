@@ -93,7 +93,7 @@ public class UserService {
                     StringBuilder list= new StringBuilder();
                     for (Currency currency : currencies) {
                         list.append("1 ").append(currency.getCcy()).append(" ( ").append(currency.getCcyNmUZ()).
-                                append(" ) ").append("\n").append("      ||      \n").append(currency.getRate()).append(" UZS (so'm)\n");
+                                append(" ) ").append("\n").append("             ||      \n").append(currency.getRate()).append(" UZS (so'm)\n");
                     }
                     sendMessage.setText(list.toString());
                 }
@@ -103,7 +103,7 @@ public class UserService {
                 else {
                     for (Currency currency : currencies) {
                         if (data.equals(currency.getCcy())) {
-                            sendMessage.setText("1 " + currency.getCcy() + " ( " + currency.getCcyNmUZ() + " )\n" + "      ||      \n" + currency.getRate() + " UZS(so'm)");
+                            sendMessage.setText("1 " + currency.getCcy() + " ( " + currency.getCcyNmUZ() + " )\n" + "             ||      \n" + currency.getRate() + " UZS(so'm)");
                         }
                     }
                 }
@@ -221,7 +221,7 @@ public class UserService {
             float v= (float) (amount * course);
             SendMessage sendMessage=new SendMessage();
             sendMessage.setChatId(user.getId().toString());
-            sendMessage.setText(amount +"   "+ name  + "\n"+"      ||      \n"+ v  + " UZS (so'm)");
+            sendMessage.setText(amount +"   "+ name  + "\n"+"             ||      \n"+ v  + " UZS (so'm)");
             user.setState(userStateRepo.findByUserState(CHOOSE_CONVERTOR));
             userRepo.save(user);
 //            sendMessage.setReplyMarkup(replyMarkup.inlineMarkup(user));
@@ -318,7 +318,7 @@ public class UserService {
             float v= (float) (amount/course);
             SendMessage sendMessage=new SendMessage();
             sendMessage.setChatId(user.getId().toString());
-            sendMessage.setText(amount + " UZS (so'm)\n" +  "      ||      \n"+ v + "  " +  name);
+            sendMessage.setText(amount + " UZS (so'm)\n" +  "             ||      \n"+ v + "  " +  name);
             user.setState(userStateRepo.findByUserState(CHOOSE_CONVERTOR));
             userRepo.save(user);
 //            sendMessage.setReplyMarkup(replyMarkup.inlineMarkup(user));
