@@ -281,7 +281,7 @@ public class UserService {
                     name = currency.getCcy()+" ( "+currency.getCcyNmUZ() +" ) ";
                     rate = currency.getRate();
                     sendMessage.setText("Siz " + currency.getCcyNmUZ() + " ni tanladingiz . Hozir kirirtadigan pul miqdoringiz o'zbek" +
-                            "so'midan "+ " "+ currency.getCcyNmUZ() + " ga konvertatsiya bo'ladi ");
+                            "so'midan "+ " "+ currency.getCcyNmUZ() + " ga konvertatsiya bo'ladi . Miqdor kiriting (Masalan,10000)");
                     user.setState(userStateRepo.findByUserState(INPUT_AMOUNT_FOR_CURRENCY));
                     user=userRepo.save(user);
                     telegramFeign.sendMessageToUser(sendMessage);
