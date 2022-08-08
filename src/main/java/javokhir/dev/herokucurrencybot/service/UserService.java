@@ -93,7 +93,7 @@ public class UserService {
                     StringBuilder list= new StringBuilder();
                     for (Currency currency : currencies) {
                         list.append("1 ").append(currency.getCcy()).append(" ( ").append(currency.getCcyNmUZ()).
-                                append(" ) ").append("\n").append(" -> ").append(currency.getRate()).append(" UZS (so'm)\n");
+                                append(" ) ").append(" -> ").append(currency.getRate()).append(" UZS (so'm)\n");
                     }
                     sendMessage.setText(list.toString());
                 }
