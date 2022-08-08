@@ -222,7 +222,7 @@ public class UserService {
             SendMessage sendMessage=new SendMessage();
             sendMessage.setChatId(user.getId().toString());
             sendMessage.setText(amount +"   "+ name  + "\n"+"             ||      \n"+ v  + " UZS (so'm)");
-            user.setState(userStateRepo.findByUserState(CHOOSE_CONVERTOR));
+            user.setState(userStateRepo.findByUserState(CONVERTOR_TO_UZBEK));
             userRepo.save(user);
 //            sendMessage.setReplyMarkup(replyMarkup.inlineMarkup(user));
             telegramFeign.sendMessageToUser(sendMessage);
@@ -319,7 +319,7 @@ public class UserService {
             SendMessage sendMessage=new SendMessage();
             sendMessage.setChatId(user.getId().toString());
             sendMessage.setText(amount + " UZS (so'm)\n" +  "             ||      \n"+ v + "  " +  name);
-            user.setState(userStateRepo.findByUserState(CHOOSE_CONVERTOR));
+            user.setState(userStateRepo.findByUserState(CONVERTOR_FROM_UZBEK));
             userRepo.save(user);
 //            sendMessage.setReplyMarkup(replyMarkup.inlineMarkup(user));
             telegramFeign.sendMessageToUser(sendMessage);
