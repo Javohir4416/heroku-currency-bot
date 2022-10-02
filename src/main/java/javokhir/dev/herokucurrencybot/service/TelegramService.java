@@ -28,14 +28,24 @@ public class TelegramService {
             if (update.getMessage().hasContact()) {
                 User user = userService.getUserFromUpdate(update);
                 SendMessage sendMessage=new SendMessage(user.getId().toString(),"Mavjud bo'lmagan buyruq");
-                telegramFeign.sendMessageToUser(sendMessage);
+                try {
+            telegramFeign.sendMessageToUser(sendMessage);
+        }
+        catch (Exception e){
+            return;
+        }
             }
 
 
             else if (update.getMessage().hasLocation()) {
                 User user = userService.getUserFromUpdate(update);
                 SendMessage sendMessage=new SendMessage(user.getId().toString(),"Mavjud bo'lmagan buyruq");
-                telegramFeign.sendMessageToUser(sendMessage);
+                try {
+            telegramFeign.sendMessageToUser(sendMessage);
+        }
+        catch (Exception e){
+            return;
+        }
             }
 
 

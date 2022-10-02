@@ -9,6 +9,10 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 @FeignClient(url = RestConstants.TELEGRAM_BASE_URL,name = "TelegramFeign")
 public interface TelegramFeign {
+
+
+
     @PostMapping("/bot"+RestConstants.BOT_TOKEN+"/sendMessage")
+
     ResultTelegram sendMessageToUser(@RequestBody  SendMessage sendMessage);
 }

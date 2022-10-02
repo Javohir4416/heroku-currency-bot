@@ -74,7 +74,12 @@ public class UserService {
         sendMessage.setText("Bu yerda qulaylik uchun mashxur valyutalar berilgan . Birini tanlashingiz yoki qolgan valyutalar ro'yxati  " +
                 "tugmasi orqali boshqa valyutalar haqida ma'lumot olishingiz mumkin  ");
         sendMessage.setReplyMarkup(replyMarkup.inlineMarkup(userFromUpdate));
-        telegramFeign.sendMessageToUser(sendMessage);
+        try {
+            telegramFeign.sendMessageToUser(sendMessage);
+        }
+        catch (Exception e){
+            return;
+        }
     }
 
     @SneakyThrows
@@ -106,7 +111,12 @@ public class UserService {
                         }
                     }
                 }
-        telegramFeign.sendMessageToUser(sendMessage);
+        try {
+            telegramFeign.sendMessageToUser(sendMessage);
+        }
+        catch (Exception e){
+            return;
+        }
     }
 
 
@@ -118,7 +128,12 @@ public class UserService {
         user.setState(userStateRepo.findByUserState(SHOW_MENU));
         user=userRepo.save(user);
         sendMessage.setReplyMarkup(replyMarkup.inlineMarkup(user));
-        telegramFeign.sendMessageToUser(sendMessage);
+        try {
+            telegramFeign.sendMessageToUser(sendMessage);
+        }
+        catch (Exception e){
+            return;
+        }
     }
 
     public void convertorToUzbek(Update update) {
@@ -130,7 +145,12 @@ public class UserService {
         sendMessage.setText("Bu bo'limda siz boshqa valyutalarni o'zbek so'miga konvertatsiya qilishiz mumkin . Birini tanlang yoki o'zingiz xohlagan valyutaning qisqartmasini " +
                 "yozing ( masalan RUB , qolgan valyuta qisqartmalarini qolgan valyutalar ro'yxati  tugmasi orqali olishingiz mumkin   ) ");
         sendMessage.setReplyMarkup(replyMarkup.inlineMarkup(user));
-        telegramFeign.sendMessageToUser(sendMessage);
+        try {
+            telegramFeign.sendMessageToUser(sendMessage);
+        }
+        catch (Exception e){
+            return;
+        }
     }
 
     public void getInformationAboutConvertor(Update update) throws IOException {
@@ -164,7 +184,12 @@ public class UserService {
             user.setState(userStateRepo.findByUserState(INPUT_AMOUNT_FOR_UZBEK));
             userRepo.save(user);
         }
-        telegramFeign.sendMessageToUser(sendMessage);
+        try {
+            telegramFeign.sendMessageToUser(sendMessage);
+        }
+        catch (Exception e){
+            return;
+        }
     }
     @SneakyThrows
     public void getCurrencyForConvertToUzbek(Update update) {
@@ -186,12 +211,22 @@ public class UserService {
                 sendMessage.setText("Siz " + currency.getCcyNmUZ() + " ni tanladingiz . Miqdorni kiriting (Masalan ,100)");
                 user.setState(userStateRepo.findByUserState(INPUT_AMOUNT_FOR_UZBEK));
                 user=userRepo.save(user);
-                telegramFeign.sendMessageToUser(sendMessage);
+                try {
+            telegramFeign.sendMessageToUser(sendMessage);
+        }
+        catch (Exception e){
+            return;
+        }
             }
         }
         if (!has) {
             sendMessage.setText("Bunday valyuta yo'q.Valyuta qisqartmasini to'g'ri va aniq kiriting!!!");
+            try {
             telegramFeign.sendMessageToUser(sendMessage);
+        }
+        catch (Exception e){
+            return;
+        }
         }
     }
 
@@ -212,7 +247,12 @@ public class UserService {
             SendMessage sendMessage=new SendMessage();
             sendMessage.setChatId(user.getId().toString());
             sendMessage.setText("Majvud raqam kiritilmadi.Qaytadan kiriting!!!");
+            try {
             telegramFeign.sendMessageToUser(sendMessage);
+        }
+        catch (Exception e){
+            return;
+        }
         }
         else {
             double course = Double.parseDouble(rate);
@@ -224,7 +264,12 @@ public class UserService {
             user.setState(userStateRepo.findByUserState(CONVERTOR_TO_UZBEK));
             userRepo.save(user);
 //            sendMessage.setReplyMarkup(replyMarkup.inlineMarkup(user));
+            try {
             telegramFeign.sendMessageToUser(sendMessage);
+        }
+        catch (Exception e){
+            return;
+        }
         }
     }
 
@@ -234,7 +279,12 @@ public class UserService {
         SendMessage sendMessage =new SendMessage();
         sendMessage.setChatId(user.getId().toString());
         sendMessage.setText("Bot foydalanuvchilari soni : "+ userList.size());
-        telegramFeign.sendMessageToUser(sendMessage);
+        try {
+            telegramFeign.sendMessageToUser(sendMessage);
+        }
+        catch (Exception e){
+            return;
+        }
     }
 
     public void chooseConvertor(Update update) {
@@ -245,7 +295,12 @@ public class UserService {
         sendMessage.setChatId(user.getId().toString());
         sendMessage.setText("Qaysi xizmatni amalga oshirmoqchisiz ? ");
         sendMessage.setReplyMarkup(replyMarkup.inlineMarkup(user));
-        telegramFeign.sendMessageToUser(sendMessage);
+        try {
+            telegramFeign.sendMessageToUser(sendMessage);
+        }
+        catch (Exception e){
+            return;
+        }
     }
 
     public void convertorFromUzbek(Update update) {
@@ -259,7 +314,12 @@ public class UserService {
                 "Valyuta qisqartmasini kiriting ");
 
         sendMessage.setReplyMarkup(replyMarkup.inlineMarkup(user));
-        telegramFeign.sendMessageToUser(sendMessage);
+        try {
+            telegramFeign.sendMessageToUser(sendMessage);
+        }
+        catch (Exception e){
+            return;
+        }
     }
 
     @SneakyThrows
@@ -283,12 +343,22 @@ public class UserService {
                             "so'midan "+ " "+ currency.getCcyNmUZ() + " ga konvertatsiya bo'ladi . Miqdor kiriting (Masalan,10000)");
                     user.setState(userStateRepo.findByUserState(INPUT_AMOUNT_FOR_CURRENCY));
                     user=userRepo.save(user);
-                    telegramFeign.sendMessageToUser(sendMessage);
+                    try {
+            telegramFeign.sendMessageToUser(sendMessage);
+        }
+        catch (Exception e){
+            return;
+        }
                 }
             }
             if (!has) {
                 sendMessage.setText("Bunday valyuta yo'q.Valyuta qisqartmasini to'g'ri va aniq kiriting!!!");
-                telegramFeign.sendMessageToUser(sendMessage);
+                try {
+            telegramFeign.sendMessageToUser(sendMessage);
+        }
+        catch (Exception e){
+            return;
+        }
             }
         }
 
@@ -309,7 +379,12 @@ public class UserService {
             SendMessage sendMessage=new SendMessage();
             sendMessage.setChatId(user.getId().toString());
             sendMessage.setText("Majvud raqam kiritilmadi.Qaytadan kiriting!!!");
+            try {
             telegramFeign.sendMessageToUser(sendMessage);
+        }
+        catch (Exception e){
+            return;
+        }
         }
         else {
             double course = Double.parseDouble(rate);
@@ -321,7 +396,12 @@ public class UserService {
             user.setState(userStateRepo.findByUserState(CONVERTOR_FROM_UZBEK));
             userRepo.save(user);
 //            sendMessage.setReplyMarkup(replyMarkup.inlineMarkup(user));
+            try {
             telegramFeign.sendMessageToUser(sendMessage);
+        }
+        catch (Exception e){
+            return;
+        }
         }
     }
 
@@ -340,6 +420,11 @@ public class UserService {
             list.append(currency.getCcyNmUZ()).append("  ➡️").append(currency.getCcy()).append("\n");
         }
         sendMessage.setText(list.toString());
-        telegramFeign.sendMessageToUser(sendMessage);
+        try {
+            telegramFeign.sendMessageToUser(sendMessage);
+        }
+        catch (Exception e){
+            return;
+        }
     }
 }

@@ -32,14 +32,24 @@ public class AdminService {
             user=userRepo.save(user);
             SendMessage sendMessage = new SendMessage(update.getMessage().getChatId().toString(), "Salom admin !!! ");
             sendMessage.setReplyMarkup(replyMarkup.inlineMarkup(user));
+            try {
             telegramFeign.sendMessageToUser(sendMessage);
+        }
+        catch (Exception e){
+            return;
+        }
         }
         else {
             SendMessage sendMessage = new SendMessage(update.getMessage().getChatId().toString(), "Parol xato ");
             user.setState(userStateRepo.findByUserState(ENTERED_WRONG_PASSWORD_FOR_ADMIN));
             user=userRepo.save(user);
             sendMessage.setReplyMarkup(replyMarkup.inlineMarkup(user));
+            try {
             telegramFeign.sendMessageToUser(sendMessage);
+        }
+        catch (Exception e){
+            return;
+        }
         }
     }
 
@@ -49,7 +59,12 @@ public class AdminService {
         sendMessage.setText(text);
         for (User user : userRepoAll) {
                 sendMessage.setChatId(user.getId().toString());
-                telegramFeign.sendMessageToUser(sendMessage);
+                try {
+            telegramFeign.sendMessageToUser(sendMessage);
+        }
+        catch (Exception e){
+            return;
+        }
         }
     }
 
@@ -59,7 +74,12 @@ public class AdminService {
         User save = userRepo.save(userFromUpdate);
         SendMessage sendMessage = new SendMessage(save.getId().toString(),
                 "O'z xabaringizni kiriting ✍️: ");
-        telegramFeign.sendMessageToUser(sendMessage);
+        try {
+            telegramFeign.sendMessageToUser(sendMessage);
+        }
+        catch (Exception e){
+            return;
+        }
     }
 
     public void checkForAdmin(Update update) {
@@ -68,7 +88,12 @@ public class AdminService {
         User save = userRepo.save(userFromUpdate);
         SendMessage sendMessage = new SendMessage(save.getId().toString(),
                 "Parolni kiriting ✍️: ");
-        telegramFeign.sendMessageToUser(sendMessage);
+        try {
+            telegramFeign.sendMessageToUser(sendMessage);
+        }
+        catch (Exception e){
+            return;
+        }
     }
 
     public void   reenterPasswordOrMainMenu(Update update) {
@@ -95,6 +120,11 @@ public class AdminService {
         SendMessage sendMessage=new SendMessage();
         sendMessage.setChatId(user.getId().toString());
         sendMessage.setText(text.toString());
-        telegramFeign.sendMessageToUser(sendMessage);
+        try {
+            telegramFeign.sendMessageToUser(sendMessage);
+        }
+        catch (Exception e){
+            return;
+        }
     }
 }
