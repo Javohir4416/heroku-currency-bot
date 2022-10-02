@@ -66,7 +66,7 @@ public class TelegramService {
                         default:
                             User userFromUpdate = userService.getUserFromUpdate(update);
                             if (userFromUpdate.getState().equals(userStateRepo.findByUserState(SEND_MESSAGE_TO_USERS))) {
-                                adminService.sendMessageToUsers(text, update);
+                                adminService.sendMessageToUsers(text);
                             }
                                else if (userFromUpdate.getState().equals(userStateRepo.findByUserState(ENTER_PASSWORD_FOR_ADMIN))) {
                                 adminService.throwToAdminCabinet(update);

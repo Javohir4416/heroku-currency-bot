@@ -43,14 +43,13 @@ public class AdminService {
         }
     }
 
-    public void sendMessageToUsers(String text,Update update) {
-        User user1 = userService.getUserFromUpdate(update);
+    public void sendMessageToUsers(String text) {
         List<User> userRepoAll = userRepo.findAll();
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setText(text);
         for (User user : userRepoAll) {
-            if(!user.getId().equals(user1.getId())) {
-                SendMessage sendMessage = new SendMessage(user.getId().toString(), text);
+                sendMessage.setChatId(user.getId().toString());
                 telegramFeign.sendMessageToUser(sendMessage);
-            }
         }
     }
 
