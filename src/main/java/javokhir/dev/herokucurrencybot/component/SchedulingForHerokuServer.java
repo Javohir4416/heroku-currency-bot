@@ -10,7 +10,7 @@ import java.net.URL;
 @Slf4j
 public class SchedulingForHerokuServer {
 
-    @Scheduled(fixedRateString = "1200000") //20 minut
+    @Scheduled(fixedRateString = "1000000") //20 minut
     public void PingMe(){
         try {
             URL url = new URL("https://mycurrency-bot.herokuapp.com/ping");
