@@ -279,6 +279,7 @@ public class UserService {
         SendMessage sendMessage =new SendMessage();
         sendMessage.setChatId(user.getId().toString());
         sendMessage.setText("Bot foydalanuvchilari soni : "+ userList.size());
+
         try {
             telegramFeign.sendMessageToUser(sendMessage);
         }
