@@ -31,6 +31,9 @@ public class PingController {
         ArrayList<CategoryItem> categoryItemArrayList=new ArrayList<>();
         categoryItemArrayList.add(categoryItem1);
         categoryItemArrayList.add(categoryItem2);
+        categoryItemArrayList.add(categoryItem3);
+        categoryItemArrayList.add(categoryItem4);
+        categoryItemArrayList.add(categoryItem5);
         category.setCategory(categoryItemArrayList);
         return category;
     }
